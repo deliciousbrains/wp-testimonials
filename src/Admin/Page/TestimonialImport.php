@@ -59,7 +59,11 @@ class TestimonialImport {
 			return;
 		}
 
-		$tweets = array_map( 'trim', explode( PHP_EOL, $tweets ) );
+		$tweets = array_map( function ( $tweet ) {
+			$parts = explode( '?', $tweet );
+
+			return trim( $parts[0] );
+		}, explode( PHP_EOL, $tweets ) );
 
 		$topic_id = filter_input( INPUT_POST, 'cat' );
 		$topic    = null;
