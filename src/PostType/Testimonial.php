@@ -206,7 +206,12 @@ class Testimonial extends AbstractPostType {
 		$testimonials = ACF::get_repeater_field( $section, array( 'testimonial' ), $post_id );
 		foreach ( $testimonials as $testimonial ) {
 			if ( is_array( $testimonial ) && isset( $testimonial['testimonial'] ) ) {
-				$all_testimonials[] = new \DeliciousBrains\WPTestimonials\Model\Testimonial( $testimonial['testimonial'] );
+				$testimonial_object = new \DeliciousBrains\WPTestimonials\Model\Testimonial( $testimonial['testimonial'] );
+				if ( ! isset( $testimonial_object->name ) ) {
+					continue;
+				}
+
+				$all_testimonials[] = $testimonial_object;
 			}
 		}
 
