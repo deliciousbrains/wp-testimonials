@@ -163,6 +163,70 @@ class Testimonial extends AbstractPostType {
 	}
 
 	/**
+	 * Fetch tweets for a specific topic slug and tweet year.
+	 *
+	 * @param string     $topic
+	 *
+	 * @param string $year the testimonial was given
+	 *
+	 * @param null $limit
+	 *
+	 * @return array
+	 */
+	public static function fetch_tweets_by_topic_and_year( $topic, $year, $limit = null ) {
+		$args = array(
+			'meta_key' => 'twitter_handle',
+		);
+
+		if ( is_numeric( $limit ) ) {
+			$args['posts_per_page'] = $limit;
+		}
+
+		return self::fetch_by_topic_and_year( $topic, $year ,$args );
+	}
+
+	/**
+	 * Fetch all testimonials for a specific topic slug and a given year.
+	 *
+	 * @param string $topic Topic slug
+	 *
+	 * @param string $tweet_year year the testimonial was given
+	 *
+	 * @param array  $args
+	 *
+	 * @return array
+	 */
+	public static function fetch_by_topic_and_year( $topic, $tweet_year ,$args = array() ) {
+		$term = get_term_by( 'slug', $topic, self::$topic_taxonomy );
+
+		$defaults = array(
+			'posts_per_page' => - 1,
+			'post_type'      => self::get_post_type(),
+			'tax_query'      => array(
+				array(
+					'taxonomy' => self::$topic_taxonomy,
+					'field'    => 'term_id',
+					'terms'    => $term->term_id,
+				),
+			),
+			'meta_query'      => array(
+				array(
+					'key' => 'testimonial_date',
+					'value' => array( "$tweet_year"."0101", "$tweet_year"."1231" ),
+					'compare' => 'BETWEEN'
+				),
+			),
+			'orderby'        => 'ID',
+			'order'          => 'ASC',
+		);
+
+		$query = new \WP_Query( array_merge( $defaults, $args ) );
+
+		return self::get_posts( $query );
+	}
+
+
+	/**
 	 * Fetch all testimonials for a specific topic slug.
 	 *
 	 * @param string $topic Topic slug
