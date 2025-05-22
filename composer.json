@@ -26,5 +26,8 @@
       "composer/installers": true,
       "boxuk/wp-muplugin-loader": true
     }
+  },
+  "extra": {
+    "mu-require-file": false
   }
 }
