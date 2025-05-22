@@ -12,6 +12,7 @@
   "type": "wordpress-muplugin",
   "require": {
     "abraham/twitteroauth": "^7.0",
+    "boxuk/wp-muplugin-loader": "^2.0",
     "composer/installers": "^2.3",
     "deliciousbrains/wp-post-types": "^1.0"
   },
@@ -22,7 +23,8 @@
   },
   "config": {
     "allow-plugins": {
-      "composer/installers": true
+      "composer/installers": true,
+      "boxuk/wp-muplugin-loader": true
     }
   }
 }
